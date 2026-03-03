@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
         ref: "Video",
       },
     ],
-    passsword: {
+    password: {
       type: String,
       required: [true, "Password is required"],
     },
@@ -49,10 +49,10 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-userSchema.pre("save", async (next) => {
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
